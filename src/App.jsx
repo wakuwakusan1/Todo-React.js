@@ -3,11 +3,14 @@ import "./styles.css";
 
 export const App = () => {
   const [todoText, setTodoText] = useState("");
+  //ああああ、いいいい、うううう、はデバッグ用の初期値 //コメントアウト解除で初期入力値
   const [incompleteTodos, setIncompleteTodos] = useState([
-    "ああああ",
-    "いいいい"
+    //"ああああ",
+    //"いいいい"
   ]);
-  const [completeTodos, setCompleteTodos] = useState(["うううう"]);
+  const [completeTodos, setCompleteTodos] = useState([
+    /*"うううう"*/
+  ]);
 
   //inputの要素がonChangeで変更があったときに,入ってくるイベント
   //event.target.valueに入り、setTodoTextのuseStateを空白から書き換える
@@ -38,6 +41,18 @@ export const App = () => {
     const newCompleteTodos = [...completeTodos, incompleteTodos[index]];
     setIncompleteTodos(newIncompleteTodos);
     setCompleteTodos(newCompleteTodos);
+  };
+
+  //戻るボタンが押された時の処理
+  const onClickBack = (index) => {
+    //完了リストからの削除処理
+    const newCompleteTodos = [...completeTodos];
+    newCompleteTodos.splice(index, 1); //index番目を１つ削除する
+
+    //未完了のTodoに追加する処理 //完了のTodoのindex番目を未完了のTodoリストへ追加
+    const newIncompleteTodos = [...incompleteTodos, completeTodos[index]];
+    setCompleteTodos(newCompleteTodos); //更新 //setCompleteTodosを呼び出してnewCompleteTodosを設定する
+    setIncompleteTodos(newIncompleteTodos); //更新
   };
 
   return (
@@ -72,11 +87,11 @@ export const App = () => {
       <div className="complete-area">
         <p className="title">完了のTodo</p>
         <ul>
-          {completeTodos.map((todo) => {
+          {completeTodos.map((todo, index) => {
             return (
               <div key={todo} className="list-row">
                 <li>{todo}</li>
-                <button>戻す</button>
+                <button onClick={() => onClickBack(index)}>戻す</button>
               </div>
             );
           })}
